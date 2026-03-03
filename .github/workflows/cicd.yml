@@ -20,7 +20,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-
+    - name: List files for debugging
+      run: ls -R
     - name: Build and Test
       run: mvn -B clean package --file pom.xml
 
