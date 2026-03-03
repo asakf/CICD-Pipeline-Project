@@ -4,14 +4,14 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
-    branches: [ "main" ] # Catch issues before they merge
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout CICD-Pipeline-Project
+    - name: Checkout Code
       uses: actions/checkout@v4
 
     - name: Set up JDK 17
@@ -20,13 +20,14 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: List files for debugging
-      run: ls -R
+
     - name: Build and Test
-      run: mvn -B clean package --file liapp/pom.xml
+      # Use working-directory so Maven finds pom.xml naturally
+      run: mvn -B clean package
+      working-directory: liapp 
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
         name: package-out
-        path: target/*.jar # Saves your build result
+        path: liapp/target/*.jar
