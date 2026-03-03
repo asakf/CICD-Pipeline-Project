@@ -20,6 +20,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+        cache-dependency-path: liapp/pom.xml
 
     - name: Build and Test
       # Use working-directory so Maven finds pom.xml naturally
