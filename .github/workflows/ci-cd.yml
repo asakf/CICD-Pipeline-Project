@@ -7,7 +7,9 @@ on:
     branches: [ "main" ]
 
 env:
-  SONAR_PROJECT_KEY: your-project-key
+  SONAR_PROJECT_KEY: CICD-sonar-Cube-Code-Hub
+  SONAR_HOST_URL: http://20.84.60.65:9000
+  SONAR_HOST_URL: http://your-sonarqube-server:9000   # <-- change this to your SonarQube URL
   DEPLOY_SERVER: your-deploy-server
   DEPLOY_PATH: /opt/apps/your-app
   APP_NAME: your-app
@@ -95,18 +97,12 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: temurin
 
-      - name: Run tests with coverage
-        run: mvn verify
-
-      - name: SonarQube Scan
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: Build, Test and SonarQube Scan
         run: |
-          mvn sonar:sonar \
+          mvn clean verify sonar:sonar \
             -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
       - name: Wait for SonarQube Quality Gate
@@ -114,7 +110,7 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
 
   # ── 4. Deploy (main branch only) ────────────────────────────────────────────
   deploy:
