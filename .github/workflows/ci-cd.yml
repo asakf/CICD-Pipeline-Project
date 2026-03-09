@@ -9,9 +9,9 @@ on:
 env:
   SONAR_PROJECT_KEY: CICD-sonar-Cube-Code-Hub
   SONAR_HOST_URL: http://20.84.60.65:9000
-  DEPLOY_SERVER: your-deploy-server
-  DEPLOY_PATH: /opt/apps/your-app
-  APP_NAME: your-app
+  DEPLOY_SERVER: 20.84.60.65
+  DEPLOY_PATH: /opt/apps/shamah-apptest
+  APP_NAME: shamah-apptest
   JAVA_VERSION: '17'
 
 permissions:
